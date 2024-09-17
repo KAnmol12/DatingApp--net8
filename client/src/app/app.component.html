@@ -1,0 +1,12 @@
+<h1>{{title}}</h1>
+
+<ul>
+    
+        
+    @for(item of usersList; track $index)
+    {
+        
+        <li>Id:{{item.id}} -  Username:{{item.username}} - Email:{{item.email}} - PhoneNo:{{item.phoneNo}}</li>
+    }
+
+</ul>
