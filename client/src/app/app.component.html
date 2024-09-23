@@ -1,12 +1,7 @@
-<h1>{{title}}</h1>
+<app-nav> </app-nav>
 
-<ul>
-    
-        
-    @for(item of usersList; track $index)
-    {
-        
-        <li>Id:{{item.id}} -  Username:{{item.username}} - Email:{{item.email}} - PhoneNo:{{item.phoneNo}}</li>
-    }
+<div class="container" style="margin-top: 100px;"> 
+    <app-home> </app-home>
 
-</ul>
+
+</div> 

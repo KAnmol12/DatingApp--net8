@@ -1,14 +1,14 @@
 ﻿using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AnmolUserController(DataContext context) : ControllerBase
+    
+    public class AnmolUserController(DataContext context) : BaseApiController
     {
         //private readonly DataContext _context;
 
@@ -16,6 +16,7 @@ namespace API.Controllers
         //{
         //    _context = context;
         //}
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AnmolUser>>> GetUsers()
         {
@@ -27,7 +28,8 @@ namespace API.Controllers
         }
 
         //}
-        [HttpGet("{id}")]
+        [Authorize]
+        [HttpGet("{id:int}")]
         public async Task <ActionResult<AnmolUser>> GetUser(int id)
         {
 
@@ -35,7 +37,7 @@ namespace API.Controllers
 
             if (user == null) return NotFound();
 
-            return user; // Returning the list of use   rs
+            return user; // Returning the list of use   
         }
     }
 }
