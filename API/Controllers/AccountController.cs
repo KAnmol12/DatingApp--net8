@@ -3,7 +3,7 @@ using System.Text;
 using API.Controllers;
 using API.Data;
 using API.DTOs;
-using API.Entities;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,11 +27,13 @@ namespace API.Controllers
 
             using var hmac = new HMACSHA512();
 
-            var user = new AnmolUser
+            var user = new AnmolUsers
             {
+
                 Username = registerDto.Username.ToLower(),
                 Email = registerDto.Email.ToLower(),
                 PhoneNo = registerDto.PhoneNo,
+                //Password = registerDto.Password,
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
                 PasswordSalt = hmac.Key
             };

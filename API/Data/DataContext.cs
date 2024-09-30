@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using API.Entities;
+
+using API.DTOs;
 
 namespace API.Data
 {
@@ -10,7 +11,7 @@ namespace API.Data
         {
         }
 
-        public DbSet<AnmolUser> AnmolUsers { get; set; } // Ensure this matches the entity class name
+        public DbSet<AnmolUsers> AnmolUsers { get; set; } // Ensure this matches the entity class name
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,6 @@
 using API.Controllers;
 using API.Data;
-using API.Entities;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +19,7 @@ public class BuggyController(DataContext context) : BaseApiController
 
 [HttpGet("server-error")]
 
-    public ActionResult<AnmolUser> GetServerError()
+    public ActionResult<DTOs.AnmolUsers> GetServerError()
     {
 
         var thing =context.AnmolUsers.Find(-1) ?? throw new Exception("A bad thing has happened");

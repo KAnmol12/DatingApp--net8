@@ -1,5 +1,5 @@
 ﻿using API.Data;
-using API.Entities;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +18,7 @@ namespace API.Controllers
         //}
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AnmolUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<DTOs.AnmolUsers>>> GetUsers()
         {
             
              var users = await context.AnmolUsers.ToListAsync() ; // Example: Returning an empty list for now
@@ -30,7 +30,7 @@ namespace API.Controllers
         //}
         [Authorize]
         [HttpGet("{id:int}")]
-        public async Task <ActionResult<AnmolUser>> GetUser(int id)
+        public async Task <ActionResult<DTOs.AnmolUsers>> GetUser(int id)
         {
 
             var user= await context.AnmolUsers.FindAsync(id);  // Example: Returning an empty list for now
