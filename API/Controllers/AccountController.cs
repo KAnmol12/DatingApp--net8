@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 using API.Controllers;
 using API.Data;
@@ -22,6 +23,7 @@ namespace API.Controllers
 
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+        
         {
             if (await UserExists(registerDto.Username)) return BadRequest("Username is taken");
 
@@ -46,6 +48,52 @@ namespace API.Controllers
                 Username = user.Username,
                 Token = _tokenService.CreateToken(user) // Generate the token
             };
+        }
+
+        // windows authenticaiton
+        [HttpGet("AuthenticateByWinUsername")]
+        public async Task<ActionResult<UserDto>> Authenticate()
+        {
+            // Get the current Windows identity (logged-in user's Windows account)
+            var windowsIdentity = User.Identity as WindowsIdentity;
+            var windowsIdentity1 = HttpContext.User.Identity;
+
+            // Check if Windows Identity is valid and authenticated
+            if (windowsIdentity1 == null || !windowsIdentity1.IsAuthenticated)
+            {
+                return Unauthorized("Windows Authentication Failed.");
+            }
+
+            // Retrieve the Windows username (format: domain\username)
+            var username = windowsIdentity1.Name;
+
+            // Optionally, strip domain if you only want the username (username = domain\username)
+            //var domainUsernameParts = username.Split('\\');
+            //if (domainUsernameParts.Length > 1)
+            //{
+            //    username = domainUsernameParts[1]; // This is the actual username without domain
+            //}
+
+            // Log the authenticated Windows username for debugging purposes
+            Console.WriteLine($"Authenticated Windows Username: {username}");
+
+            // Query the database for the user based on the Windows username
+            var user = await _context.AnmolUsers.FirstOrDefaultAsync(x => x.WinUserName == username);
+
+            if (user == null)
+            {
+                return NotFound(new { Message = "User not found in the database." });
+            }
+
+            // Call the TokenService to generate a token for the authenticated user
+            var token = _tokenService.CreateToken(user);
+
+            // Return the token and user details as DTO (Data Transfer Object)
+            return Ok(new UserDto
+            {
+                Username = user.Username,
+                Token = token
+            });
         }
 
         [HttpPost("login")]

@@ -9,19 +9,26 @@ import { map, Observable } from 'rxjs';
 export class AccountService {
   private http = inject(HttpClient);
   baseUrl = 'https://localhost:44303/api/';
+  private winAuthUrl = "https://localhost:44303/api/Account/AuthenticateByWinUsername";
   currentUser = signal<User | null>(null);
 
-  login(model: any): Observable<void> {
-    return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
-      map(user => {
-        if (user && user.token) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.currentUser.set(user);
-        }
-        
-      })
-    );
+  loginByWinUser()
+  {
+    return this.http.get(this.winAuthUrl , {withCredentials: true});
   }
+
+  // login(model: any): Observable<void> {
+  //   return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
+  //     map(user => {
+  //       if (user && user.token) {
+  //         localStorage.setItem('user', JSON.stringify(user));
+  //         this.currentUser.set(user);
+  //       }
+        
+  //     })
+  //   );
+  // }
+
   
 
   register(model: any) {

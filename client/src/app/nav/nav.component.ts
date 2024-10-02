@@ -19,14 +19,31 @@ export class NavComponent {
   model: any ={};
 
   login(){
-    this.accountService.login(this.model).subscribe({
-      next: _ => {
-       void this.router.navigateByUrl('/members')
-      },
-      error: error => console.log(error)
-    })
+    // this.accountService.login(this.model).subscribe({
+    //   next: _ => {
+    //    void this.router.navigateByUrl('/members')
+    //   },
+    //   error: error => console.log(error)
+    // })
+    this.accountService.loginByWinUser().subscribe((res:any) =>
+    {
+
+      if(res)
+      {
+        localStorage.setItem('user', res.username);
+        localStorage.setItem('token', res.token);
+        this.accountService.currentUser.set(res);
+        
+        void this.router.navigateByUrl('/members')
+      }
+      else{
+        alert("Unable to login");
+      }
+    });
 
   }
+
+
   logout(){
     this.accountService.logout();
     void this.router.navigateByUrl('/');
